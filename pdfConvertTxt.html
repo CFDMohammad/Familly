@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Text Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #fileInput {
+            margin-bottom: 20px;
+        }
+        #convertBtn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #status {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PDF to Text Converter</h1>
+    <input type="file" id="fileInput" multiple accept=".pdf">
+    <button id="convertBtn">Convert and Merge PDFs</button>
+    <div id="status"></div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+
+        document.getElementById('convertBtn').addEventListener('click', convertPDFs);
+
+        async function convertPDFs() {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+            const statusDiv = document.getElementById('status');
+
+            if (files.length === 0) {
+                statusDiv.textContent = 'Please select PDF files to convert.';
+                return;
+            }
+
+            statusDiv.textContent = 'Converting PDFs...';
+            let mergedText = '';
+
+            for (let file of files) {
+                try {
+                    const text = await extractTextFromPDF(file);
+                    mergedText += `--- ${file.name} ---\n\n${text}\n\n`;
+                } catch (error) {
+                    console.error(`Error processing ${file.name}:`, error);
+                    statusDiv.textContent += `\nError processing ${file.name}`;
+                }
+            }
+
+            downloadTextFile(mergedText, 'merged_pdfs.txt');
+            statusDiv.textContent = 'Conversion complete. Text file downloaded.';
+        }
+
+        async function extractTextFromPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+            let text = '';
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const content = await page.getTextContent();
+                const pageText = content.items.map(item => item.str).join(' ');
+                text += pageText + '\n';
+            }
+
+            return text;
+        }
+
+        function downloadTextFile(text, filename) {
+            const blob = new Blob([text], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
