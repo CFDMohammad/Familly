@@ -1,81 +1,87 @@
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Merger with Error Logging</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>My Simple Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+        }
+        nav a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+        }
+        nav a:hover {
+            background-color: #575757;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>PDF Merger with Error Logging</h1>
-    <input type="file" id="fileInput" multiple accept=".pdf">
-    <button onclick="mergePDFs()">Merge PDFs</button>
-    <p id="status"></p>
-    <pre id="errorLog" style="color: red;"></pre>
-
-    <script>
-        async function mergePDFs() {
-            const fileInput = document.getElementById('fileInput');
-            const statusElement = document.getElementById('status');
-            const errorLogElement = document.getElementById('errorLog');
-            const files = fileInput.files;
-            
-            if (files.length < 2) {
-                alert('Please select at least two PDF files to merge.');
-                return;
-            }
-
-            statusElement.textContent = 'Processing... Please wait.';
-            errorLogElement.textContent = '';
-
-            try {
-                const mergedPdf = new jspdf.jsPDF();
-                
-                for (let i = 0; i < files.length; i++) {
-                    statusElement.textContent = `Processing file ${i + 1} of ${files.length}...`;
-                    const file = files[i];
-                    try {
-                        const arrayBuffer = await file.arrayBuffer();
-                        const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-                        
-                        for (let j = 1; j <= pdf.numPages; j++) {
-                            const page = await pdf.getPage(j);
-                            const scale = 1.5; // Reduced scale to lower memory usage
-                            const viewport = page.getViewport({ scale: scale });
-                            const canvas = document.createElement('canvas');
-                            const context = canvas.getContext('2d');
-                            canvas.height = viewport.height;
-                            canvas.width = viewport.width;
-                            await page.render({ canvasContext: context, viewport: viewport }).promise;
-                            
-                            if (i > 0 || j > 1) {
-                                mergedPdf.addPage([viewport.width / scale, viewport.height / scale]);
-                            } else {
-                                mergedPdf.setPageSize([viewport.width / scale, viewport.height / scale]);
-                            }
-                            mergedPdf.addImage(canvas.toDataURL('image/jpeg', 0.8), 'JPEG', 0, 0, viewport.width / scale, viewport.height / scale);
-                        }
-                    } catch (fileError) {
-                        errorLogElement.textContent += `Error processing file ${i + 1}: ${fileError.message}\n`;
-                    }
-                }
-                
-                statusElement.textContent = 'Generating download link...';
-                const pdfBlob = mergedPdf.output('blob');
-                const url = URL.createObjectURL(pdfBlob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'merged.pdf';
-                link.click();
-                URL.revokeObjectURL(url);
-                statusElement.textContent = 'Merge complete! Check your downloads folder.';
-            } catch (error) {
-                console.error('Error merging PDFs:', error);
-                errorLogElement.textContent += `General error: ${error.message}\n`;
-                statusElement.textContent = 'An error occurred while merging PDFs. Please check the error log below.';
-            }
-        }
-    </script>
+    <header>
+        <h1>Welcome to My Website</h1>
+    </header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <div class="container">
+        <section id="home">
+            <h2>Home</h2>
+            <p>This is the home section of the website. You can put some introductory content here.</p>
+        </section>
+        <section id="about">
+            <h2>About</h2>
+            <p>This section is about the website or the author. You can include details about yourself or your business here.</p>
+        </section>
+        <section id="services">
+            <h2>Services</h2>
+            <p>Describe the services you offer or the products you sell in this section.</p>
+        </section>
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>Provide contact details or a contact form here.</p>
+        </section>
+    </div>
+    <footer>
+        <p>&copy; 2024 My Simple Website. All rights reserved.</p>
+    </footer>
 </body>
 </html>
