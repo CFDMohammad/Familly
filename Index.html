@@ -1,87 +1,127 @@
-    
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple Website</title>
+    <title>AI Models and LLMs in Biopharma</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        body, html {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            overflow: hidden;
         }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 0;
+        .slide {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+            background: linear-gradient(to right, #e6f3ff, #f0e6ff);
+            padding: 20px;
+            box-sizing: border-box;
         }
-        nav {
+        h1 {
+            color: #1a5f7a;
+            margin-bottom: 20px;
+        }
+        ul {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: center;
-            background-color: #333;
         }
-        nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
-        nav a:hover {
-            background-color: #575757;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
+        button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Website</h1>
-    </header>
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
-        <a href="#contact">Contact</a>
-    </nav>
-    <div class="container">
-        <section id="home">
-            <h2>Home</h2>
-            <p>This is the home section of the website. You can put some introductory content here.</p>
-        </section>
-        <section id="about">
-            <h2>About</h2>
-            <p>This section is about the website or the author. You can include details about yourself or your business here.</p>
-        </section>
-        <section id="services">
-            <h2>Services</h2>
-            <p>Describe the services you offer or the products you sell in this section.</p>
-        </section>
-        <section id="contact">
-            <h2>Contact</h2>
-            <p>Provide contact details or a contact form here.</p>
-        </section>
+    <div id="presentation">
+        <div class="slide" id="slide1">
+            <h1>AI Models and LLMs in Biopharma</h1>
+            <p>Exploring the transformative impact of Artificial Intelligence<br>and Large Language Models in the biopharmaceutical industry</p>
+        </div>
+
+        <div class="slide" id="slide2" style="display: none;">
+            <h1>Background</h1>
+            <ul>
+                <li>AI models: Computer systems designed to perform tasks that typically require human intelligence</li>
+                <li>LLMs (Large Language Models): AI models trained on vast amounts of text data to understand and generate human-like text</li>
+                <li>Biopharma industry: Focuses on developing new drugs and medical treatments</li>
+                <li>Growing need for efficient drug discovery and development processes</li>
+                <li>Increasing amounts of biomedical data requiring advanced analysis techniques</li>
+            </ul>
+        </div>
+
+        <div class="slide" id="slide3" style="display: none;">
+            <h1>Applications of AI Models in Biopharma</h1>
+            <ul>
+                <li>Drug discovery and development: Predicting potential drug candidates</li>
+                <li>Personalized medicine: Tailoring treatments based on individual patient data</li>
+                <li>Clinical trial optimization: Improving patient selection and trial design</li>
+                <li>Medical imaging analysis: Enhancing diagnosis through image interpretation</li>
+                <li>Predictive modeling: Forecasting disease progression and treatment outcomes</li>
+            </ul>
+        </div>
+
+        <div class="slide" id="slide4" style="display: none;">
+            <h1>Applications of LLMs in Biopharma</h1>
+            <ul>
+                <li>Literature review and knowledge synthesis: Rapidly analyzing research papers</li>
+                <li>Biomedical text analysis: Extracting insights from medical records and scientific literature</li>
+                <li>Automated report generation: Creating comprehensive summaries of clinical trials or research findings</li>
+                <li>Patient data interpretation: Understanding and categorizing patient symptoms and histories</li>
+                <li>Drug-drug interaction prediction: Identifying potential interactions between multiple medications</li>
+            </ul>
+        </div>
+
+        <div class="slide" id="slide5" style="display: none;">
+            <h1>Summary</h1>
+            <p>AI models and LLMs are revolutionizing the biopharma industry by:</p>
+            <ul>
+                <li>Accelerating drug discovery and development processes</li>
+                <li>Enhancing personalized medicine approaches</li>
+                <li>Improving clinical trial design and execution</li>
+                <li>Facilitating more efficient analysis of biomedical data and literature</li>
+                <li>Enabling better prediction of treatment outcomes and drug interactions</li>
+            </ul>
+            <p>These technologies have the potential to significantly reduce the time and cost of bringing new treatments to patients, ultimately improving healthcare outcomes.</p>
+        </div>
     </div>
-    <footer>
-        <p>&copy; 2024 My Simple Website. All rights reserved.</p>
-    </footer>
+
+    <div class="navigation">
+        <button onclick="changeSlide(-1)">Previous</button>
+        <button onclick="changeSlide(1)">Next</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 5;
+
+        function changeSlide(direction) {
+            document.getElementById(`slide${currentSlide}`).style.display = 'none';
+            currentSlide += direction;
+            if (currentSlide > totalSlides) currentSlide = 1;
+            if (currentSlide < 1) currentSlide = totalSlides;
+            document.getElementById(`slide${currentSlide}`).style.display = 'flex';
+        }
+    </script>
 </body>
 </html>
